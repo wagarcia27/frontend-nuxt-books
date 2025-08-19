@@ -9,5 +9,9 @@
 </template>
 
 <script setup lang="ts">
-// No-op
+const auth = useAuthStore()
+onMounted(() => {
+  // Validar sesión si hay token guardado
+  if (auth.token) auth.whoAmI()
+})
 </script>

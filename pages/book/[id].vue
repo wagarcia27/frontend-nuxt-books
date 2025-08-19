@@ -38,16 +38,19 @@ const showToast = ref(false)
 const api = useApi()
 
 onMounted(async () => {
-  // Primero intenta cargar desde mi biblioteca por el id recibido (sea ObjectId u otro formato)
-  const existing = await useLibraryStore().getById(id)
-  if (existing) {
-    existingLibraryId.value = id
-    book.value = existing
-    if ((existing as any).review) {
-      review.value = (existing as any).review
-      rating.value = Number((existing as any).rating || 0)
+  // Solo consultar la biblioteca si el id parece un ObjectId válido.
+  const isMongoId = /^[a-f0-9]{24}$/i.test(id)
+  if (isMongoId) {
+    const existing = await useLibraryStore().getById(id)
+    if (existing) {
+      existingLibraryId.value = id
+      book.value = existing
+      if ((existing as any).review) {
+        review.value = (existing as any).review
+        rating.value = Number((existing as any).rating || 0)
+      }
+      return
     }
-    return
   }
   // Si venimos desde resultados, úsalo; si no, trae por work id desde OpenLibrary
   const fromList = search.results.find(r => r.id === id)

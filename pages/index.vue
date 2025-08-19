@@ -30,7 +30,11 @@
         :key="b.id"
         :to="`/book/${b.id}`"
       >
-        <BookCard :title="b.title" :author="b.author" :year="undefined" :cover="b.coverUrl" :showMeta="false" />
+        <BookCard :title="b.title" :author="b.author" :year="undefined" :cover="b.coverUrl" :showMeta="false">
+          <template #actions>
+            <span v-if="b.saved" class="tag">Guardado</span>
+          </template>
+        </BookCard>
       </NuxtLink>
     </div>
     <EmptyState v-else title="No encontramos libros con el título ingresado" subtitle="Intenta con otro título o revisa la ortografía.">
@@ -43,5 +47,6 @@
 const store = useSearchStore()
 const doSearch = (q: string) => store.searchByTitle(q)
 const limited = computed(() => store.results.slice(0, 10))
+onMounted(() => store.loadLastQueries())
 </script>
 

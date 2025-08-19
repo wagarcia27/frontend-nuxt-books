@@ -5,6 +5,11 @@
       <nav class="row">
         <NuxtLink to="/">Inicio</NuxtLink>
         <NuxtLink to="/library">Mi biblioteca</NuxtLink>
+        <div v-if="auth.isAuthenticated" class="row" style="gap:8px; align-items:center;">
+          <span class="muted">{{ auth.userName }}</span>
+          <button class="btn secondary" @click="auth.logout()">Logout</button>
+        </div>
+        <NuxtLink v-else class="btn secondary" to="/login">Login</NuxtLink>
       </nav>
     </div>
   </header>
@@ -16,5 +21,6 @@
 <script setup lang="ts">
 const config = useRuntimeConfig()
 const appName = config.public.appName
+const auth = useAuthStore()
 </script>
 

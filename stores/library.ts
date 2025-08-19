@@ -38,11 +38,12 @@ export const useLibraryStore = defineStore('library', {
     },
     async getById(id: string) {
       const api = useApi()
+      const isMongoId = /^[a-f0-9]{24}$/i.test(id)
+      if (!isMongoId) return undefined
       try {
         const res: any = await api.get(`/books/my-library/${id}`)
         return res?.item ?? res
       } catch (e) {
-        // Si no existe en la biblioteca, devolvemos undefined en lugar de lanzar
         return undefined
       }
     },

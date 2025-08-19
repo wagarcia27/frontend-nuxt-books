@@ -6,6 +6,8 @@ export interface BookSearchItem {
   author: string
   year?: number
   coverUrl?: string
+  saved?: boolean
+  savedId?: string
 }
 
 interface SearchState {
@@ -46,7 +48,9 @@ export const useSearchStore = defineStore('search', {
           title: r.title,
           author: r.author,
           year: r.year || r.publishYear,
-          coverUrl: normalizeCoverUrl(r.coverUrl)
+          coverUrl: normalizeCoverUrl(r.coverUrl),
+          saved: Boolean(r.saved),
+          savedId: r.savedId || r.savedID || r.libraryId || undefined
         }))
         this.results = mapped
       } catch (e: any) {
