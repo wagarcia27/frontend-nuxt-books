@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  devServer: {
+    port: 3100
+  },
   modules: [
     '@pinia/nuxt'
   ],
@@ -13,7 +16,10 @@ export default defineNuxtConfig({
     basicPass: process.env.BASIC_PASS || 'admin123',
     public: {
       // Public runtime config
-      appName: 'Book Reviews'
+      appName: 'Book Reviews',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
+      basicUser: process.env.NUXT_PUBLIC_BASIC_USER || '',
+      basicPass: process.env.NUXT_PUBLIC_BASIC_PASS || ''
     }
   }
 })
