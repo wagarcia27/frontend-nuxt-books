@@ -8,12 +8,18 @@
       </div>
       <form v-if="tab==='login'" class="form" @submit.prevent="onLogin">
         <input v-model="username" class="input" placeholder="Usuario" autocomplete="username" />
-        <input v-model="password" class="input" type="password" placeholder="Contraseña" autocomplete="current-password" />
+        <div class="password-field">
+          <input :type="showPass ? 'text' : 'password'" v-model="password" class="input" placeholder="Contraseña" autocomplete="current-password" />
+          <button type="button" class="eye" @click="showPass=!showPass" :aria-label="showPass ? 'Ocultar' : 'Mostrar'">{{ showPass ? '🙈' : '👁️' }}</button>
+        </div>
         <button class="btn" :disabled="loading">Entrar</button>
       </form>
       <form v-else class="form" @submit.prevent="onRegister">
         <input v-model="username" class="input" placeholder="Usuario" />
-        <input v-model="password" class="input" type="password" placeholder="Contraseña" />
+        <div class="password-field">
+          <input :type="showPass ? 'text' : 'password'" v-model="password" class="input" placeholder="Contraseña" />
+          <button type="button" class="eye" @click="showPass=!showPass" :aria-label="showPass ? 'Ocultar' : 'Mostrar'">{{ showPass ? '🙈' : '👁️' }}</button>
+        </div>
         <button class="btn" :disabled="loading">Crear cuenta</button>
       </form>
       <p v-if="error" class="error">{{ error }}</p>
@@ -29,6 +35,7 @@ const password = ref('')
 const loading = ref(false)
 const error = ref('')
 const tab = ref<'login'|'register'>('login')
+const showPass = ref(false)
 
 const onLogin = async () => {
   loading.value = true; error.value = ''
@@ -72,5 +79,10 @@ onMounted(() => {
 .tabs button.active { background: var(--primary); color: white; border-color: transparent; }
 .form { display: grid; gap: 10px; }
 .error { color: #fca5a5; margin-top: 10px; }
+.password-field { position: relative; }
+.password-field .eye {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: transparent; border: none; cursor: pointer; font-size: 16px; line-height: 1;
+}
 </style>
 

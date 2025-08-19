@@ -19,7 +19,7 @@
     </div>
 
     <div class="spacer-lg" />
-    <div v-if="store.isLoading">
+    <div v-if="store.isLoading && hasSearched">
       <div class="grid">
         <SkeletonCard v-for="i in 6" :key="i" />
       </div>
@@ -37,7 +37,7 @@
         </BookCard>
       </NuxtLink>
     </div>
-    <EmptyState v-else title="No encontramos libros con el título ingresado" subtitle="Intenta con otro título o revisa la ortografía.">
+    <EmptyState v-else-if="hasSearched" title="No encontramos libros con el título ingresado" subtitle="Intenta con otro título o revisa la ortografía.">
       <button v-for="q in store.lastQueries.slice(0,5)" :key="q" class="btn" @click="doSearch(q)">{{ q }}</button>
     </EmptyState>
   </section>
@@ -45,7 +45,8 @@
 
 <script setup lang="ts">
 const store = useSearchStore()
-const doSearch = (q: string) => store.searchByTitle(q)
+const hasSearched = ref(false)
+const doSearch = (q: string) => { hasSearched.value = true; store.searchByTitle(q) }
 const limited = computed(() => store.results.slice(0, 10))
 onMounted(() => store.loadLastQueries())
 </script>

@@ -1,6 +1,7 @@
 <template>
   <section>
-    <ConfirmToast v-if="toast" v-model="toastVisible" :message="toast" :timeoutMs="4000" />
+    <!-- toast de llegada por query (?msg=...) y acciones -->
+    <ConfirmToast v-model="showToast" :message="toastMsg" :timeoutMs="4000" />
     <div class="card">
       <div class="toolbar">
         <input v-model="filters.q" class="input" placeholder="Buscar por título" />
@@ -89,15 +90,12 @@ const confirmRemove = async () => {
   showToast.value = true
 }
 const route = useRoute()
-const toast = computed(() => {
+onMounted(() => {
   const msg = route.query.msg as string | undefined
-  if (!msg) return ''
-  if (msg === 'guardado') return 'Libro guardado en tu biblioteca.'
-  if (msg === 'actualizado') return 'Cambios guardados.'
-  return ''
+  if (msg === 'guardado') { toastMsg.value = 'Libro guardado en tu biblioteca.'; showToast.value = true }
+  if (msg === 'actualizado') { toastMsg.value = 'Cambios guardados.'; showToast.value = true }
+  if (msg) navigateTo({ path: route.path, query: {} }, { replace: true })
 })
-const toastVisible = ref(Boolean(toast.value))
-watch(toast, (val) => { if (val) toastVisible.value = true })
 const idFor = (b: any) => b?.id || b?._id
 const sortBy = ref<'' | 'asc' | 'desc'>('')
 const itemsSorted = computed(() => store.items)
