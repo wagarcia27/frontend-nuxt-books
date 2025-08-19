@@ -26,9 +26,9 @@ const auth = useAuthStore()
 
 <style scoped>
 .header-nav { width: 100%; display: flex; gap: 16px; align-items: center; }
+.auth-box { margin-left: auto; }
 @media (max-width: 640px) {
   .header-nav { justify-content: space-between; }
-  .auth-box { margin-left: auto; }
 }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
   <section v-if="book">
     <BookCard :title="book.title" :author="book.author" :year="book.year" :cover="coverSrc">
-      <form class="card" @submit.prevent="save">
+      <form class="card review-card" @submit.prevent="save">
         <div class="row between">
           <h4 style="margin:0;">Agregar a "mi biblioteca"</h4>
           <span class="muted">ID: {{ id }}</span>
@@ -9,7 +9,10 @@
         <div class="spacer" />
         <StarRating v-model="rating" />
         <div class="spacer" />
-        <textarea v-model="review" maxlength="500" placeholder="Escribe un pequeño review (máx 500 caracteres)" />
+        <div class="textarea-wrap">
+          <textarea v-model="review" maxlength="500" placeholder="Escribe un pequeño review (máx 500 caracteres)" />
+          <span class="char-counter">{{ review.length }}/500</span>
+        </div>
         <div class="spacer" />
         <div class="row between">
           <button class="btn">Guardar</button>
@@ -102,4 +105,11 @@ const save = async () => {
   if (saved && (saved as any)._id) { showToast.value = true; setTimeout(() => navigateTo('/library?msg=guardado', { replace: true }), 1200) }
 }
 </script>
+
+<style scoped>
+.review-card { display: grid; gap: 12px; }
+.review-card :deep(img.cover) { height: 100%; width: 180px; object-fit: cover; }
+.textarea-wrap { position: relative; }
+.textarea-wrap .char-counter { position: absolute; right: 10px; bottom: 8px; font-size: 12px; color: var(--muted); }
+</style>
 
