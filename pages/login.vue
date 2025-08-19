@@ -1,7 +1,7 @@
 <template>
   <section class="auth-wrapper">
     <div class="auth-card">
-      <ConfirmToast v-model="showToast" message="Sesión cerrada" />
+      <ConfirmToast v-model="showToast" :message="toastText" :timeoutMs="toastTimeout" />
       <div class="tabs">
         <button :class="{ active: tab==='login' }" @click="tab='login'">Iniciar sesión</button>
         <button :class="{ active: tab==='register' }" @click="tab='register'">Crear cuenta</button>
@@ -17,7 +17,6 @@
         <button class="btn" :disabled="loading">Crear cuenta</button>
       </form>
       <p v-if="error" class="error">{{ error }}</p>
-      <p v-if="info" class="info">{{ info }}</p>
     </div>
   </section>
 </template>
@@ -29,7 +28,6 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const error = ref('')
-const info = ref('')
 const tab = ref<'login'|'register'>('login')
 
 const onLogin = async () => {
@@ -41,20 +39,26 @@ const onLogin = async () => {
 }
 
 const onRegister = async () => {
-  loading.value = true; error.value = ''; info.value = ''
+  loading.value = true; error.value = ''
   try {
     await auth.register(username.value, password.value)
-    info.value = 'Cuenta creada correctamente. Ahora inicia sesión con tus credenciales.'
     password.value = ''
     tab.value = 'login'
+    toastText.value = 'Cuenta creada correctamente. Ahora inicia sesión con tus credenciales.'
+    toastTimeout.value = 5000
+    showToast.value = true
   } catch (e: any) {
     error.value = e?.data?.message || 'No se pudo registrar'
   } finally { loading.value = false }
 }
 
 const showToast = ref(false)
+const toastText = ref('Sesión cerrada')
+const toastTimeout = ref(1800)
 onMounted(() => {
   if (route.query.msg === 'logout') {
+    toastText.value = 'Sesión cerrada'
+    toastTimeout.value = 1800
     showToast.value = true
   }
 })

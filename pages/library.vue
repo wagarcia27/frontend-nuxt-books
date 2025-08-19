@@ -1,8 +1,6 @@
 <template>
   <section>
-    <div v-if="toast" class="card" style="background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.35); margin-bottom:12px;">
-      {{ toast }}
-    </div>
+    <ConfirmToast v-if="toast" v-model="toastVisible" :message="toast" :timeoutMs="4000" />
     <div class="card">
       <div class="toolbar">
         <input v-model="filters.q" class="input" placeholder="Buscar por título" />
@@ -98,6 +96,8 @@ const toast = computed(() => {
   if (msg === 'actualizado') return 'Cambios guardados.'
   return ''
 })
+const toastVisible = ref(Boolean(toast.value))
+watch(toast, (val) => { if (val) toastVisible.value = true })
 const idFor = (b: any) => b?.id || b?._id
 const sortBy = ref<'' | 'asc' | 'desc'>('')
 const itemsSorted = computed(() => store.items)
