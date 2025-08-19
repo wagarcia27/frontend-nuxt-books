@@ -18,6 +18,11 @@ npm install
 ```env
 NUXT_PUBLIC_API_BASE=http://localhost:3000/api
 ```
+
+Para producción en GitHub Pages con backend en Koyeb, define en GitHub → Settings → Secrets and variables → Actions → Variables:
+```
+NUXT_PUBLIC_API_BASE=https://TU_APP.koyeb.app/api
+```
 3) Ejecutar en desarrollo
 ```bash
 npm run dev
