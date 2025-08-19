@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  nitro: { preset: 'github-pages' },
+  app: {
+    baseURL: process.env.GH_PAGES === 'true' ? '/frontend-nuxt-books/' : '/',
+  },
   devServer: {
     port: 3100
   },
