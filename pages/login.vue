@@ -1,7 +1,7 @@
 <template>
   <section class="auth-wrapper">
     <div class="auth-card">
-      <ConfirmToast v-model="showToast" :message="toastText" :timeoutMs="toastTimeout" />
+      <ConfirmToast v-model="showToast" :message="toastText" :timeoutMs="toastTimeout" :variant="toastVariant" />
       <div class="tabs">
         <button :class="{ active: tab==='login' }" @click="tab='login'">Iniciar sesión</button>
         <button :class="{ active: tab==='register' }" @click="tab='register'">Crear cuenta</button>
@@ -41,8 +41,14 @@ const onLogin = async () => {
   loading.value = true; error.value = ''
   const ok = await auth.login(username.value, password.value)
   loading.value = false
-  if (ok) navigateTo('/')
-  else error.value = 'Credenciales inválidas'
+  if (ok) {
+    navigateTo('/')
+  } else {
+    toastText.value = 'Credenciales inválidas'
+    toastTimeout.value = 4000
+    toastVariant.value = 'error'
+    showToast.value = true
+  }
 }
 
 const onRegister = async () => {
@@ -53,19 +59,27 @@ const onRegister = async () => {
     tab.value = 'login'
     toastText.value = 'Cuenta creada correctamente. Ahora inicia sesión con tus credenciales.'
     toastTimeout.value = 5000
+    toastVariant.value = 'success'
     showToast.value = true
   } catch (e: any) {
-    error.value = e?.data?.message || 'No se pudo registrar'
+    const msg = e?.data?.message || e?.message || 'No se pudo registrar'
+    error.value = ''
+    toastText.value = msg
+    toastTimeout.value = 5000
+    toastVariant.value = 'error'
+    showToast.value = true
   } finally { loading.value = false }
 }
 
 const showToast = ref(false)
 const toastText = ref('Sesión cerrada')
 const toastTimeout = ref(1800)
+const toastVariant = ref<'success' | 'error'>('success')
 onMounted(() => {
   if (route.query.msg === 'logout') {
     toastText.value = 'Sesión cerrada'
     toastTimeout.value = 1800
+    toastVariant.value = 'success'
     showToast.value = true
   }
 })

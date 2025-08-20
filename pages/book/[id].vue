@@ -1,6 +1,6 @@
 <template>
   <section v-if="book">
-    <BookCard :title="book.title" :author="book.author" :year="book.year" :cover="coverSrc">
+    <BookCard :title="book.title" :author="book.author" :year="book.year" :cover="coverSrc" :largeCover="true">
       <form class="card review-card" @submit.prevent="save">
         <div class="row between">
           <h4 style="margin:0;">Agregar a "mi biblioteca"</h4>
