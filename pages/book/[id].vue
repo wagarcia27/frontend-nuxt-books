@@ -57,8 +57,9 @@ onMounted(async () => {
   }
   // Si venimos desde resultados, úsalo; si no, trae por work id desde OpenLibrary
   const fromList = search.results.find(r => r.id === id)
-  if (fromList) { book.value = fromList; return }
+  if (fromList) { book.value = fromList; await addRecent(); return }
   book.value = await open.getWorkById(id)
+  await addRecent()
 })
 
 const extractCoverId = (url?: string) => {
@@ -83,6 +84,21 @@ const coverSrc = computed(() => {
   }
   return url
 })
+
+const addRecent = async () => {
+  if (existingLibraryId.value) return
+  if (!book.value) return
+  const workId = (book.value.id || id) as string
+  const workKey = workId.startsWith('/works/') ? workId : `/works/${workId}`
+  const payload: any = {
+    openLibraryWorkKey: workKey,
+    title: book.value.title,
+    author: book.value.author,
+    publishYear: (book.value as any).year || undefined,
+    coverId: extractCoverId((book.value as any).coverUrl)
+  }
+  try { await api.post('/books/recent', payload) } catch {}
+}
 
 const save = async () => {
   if (!book.value) return
