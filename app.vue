@@ -16,5 +16,7 @@ onMounted(() => {
     // Validación en background; no cerrar sesión si falla, solo loguear
     auth.whoAmI().catch(() => {})
   }
+  // Asegurar que el header reciba el usuario guardado al recargar
+  auth.initFromStorage()
 })
 </script>

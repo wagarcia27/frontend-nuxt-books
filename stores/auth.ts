@@ -14,6 +14,13 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => Boolean(state.token)
   },
   actions: {
+    initFromStorage() {
+      if (!process.client) return
+      const tok = localStorage.getItem('br_token')
+      const usr = localStorage.getItem('br_user')
+      if (tok) this.token = tok
+      if (usr) this.userName = usr
+    },
     async login(username: string, password: string) {
       const basic = btoa(`${username}:${password}`)
       const config = useRuntimeConfig()
