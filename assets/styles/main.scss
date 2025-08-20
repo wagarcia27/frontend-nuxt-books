@@ -17,6 +17,8 @@ body {
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
 }
+/* Evitar parpadeos en SSR/hydration */
+[v-cloak] { visibility: hidden; }
 
 .container {
   max-width: 960px;

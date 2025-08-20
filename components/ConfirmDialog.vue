@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
     <div v-if="modelValue" class="cd-backdrop" @click="onBackdrop" />
-    <div v-if="modelValue" class="cd-modal" role="dialog" aria-modal="true" :aria-labelledby="id + '-title'">
+    <div v-if="modelValue" class="cd-modal" role="dialog" aria-modal="true" :aria-label="title">
       <div class="cd-card">
-        <h3 :id="id + '-title'" class="cd-title">{{ title }}</h3>
+        <h3 class="cd-title">{{ title }}</h3>
         <p class="cd-message">{{ message }}</p>
         <div class="cd-actions">
           <button class="btn secondary" @click="cancel">{{ cancelText }}</button>
@@ -32,7 +32,6 @@ const emit = defineEmits<{
   confirm: []
   cancel: []
 }>()
-const id = Math.random().toString(36).slice(2)
 const close = () => emit('update:modelValue', false)
 const cancel = () => { emit('cancel'); close() }
 const confirm = () => { emit('confirm'); close() }

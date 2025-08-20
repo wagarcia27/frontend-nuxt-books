@@ -1,5 +1,5 @@
 <template>
-  <section class="auth-wrapper">
+  <section class="auth-wrapper" v-cloak>
     <div class="auth-card">
       <ConfirmToast v-model="showToast" :message="toastText" :timeoutMs="toastTimeout" :variant="toastVariant" />
       <div class="tabs">
