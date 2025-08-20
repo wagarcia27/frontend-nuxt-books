@@ -55,6 +55,8 @@ onMounted(async () => {
     navigateTo('/login', { replace: true })
     return
   }
+  // Evitar mostrar resultados previos de otra vista mientras cargamos home
+  store.results = []
   await store.loadLastQueries()
   await store.loadHome()
 })
