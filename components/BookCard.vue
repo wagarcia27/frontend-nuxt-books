@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="display:flex; gap:12px; align-items:flex-start; min-height:160px;">
+  <div class="card" :class="{ 'stack-mobile': centerOnMobile }" style="display:flex; gap:12px; align-items:flex-start; min-height:160px;">
     <img :src="cover" alt="portada" :class="['cover', { 'cover-large': largeCover }]" loading="lazy" />
     <div style="flex:1;">
       <h3 class="card-title">{{ title }}</h3>
@@ -12,11 +12,11 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(defineProps<{ title: string; author: string; year?: number; cover?: string; showMeta?: boolean; largeCover?: boolean }>(), {
+const props = withDefaults(defineProps<{ title: string; author: string; year?: number; cover?: string; showMeta?: boolean; largeCover?: boolean; centerOnMobile?: boolean }>(), {
   showMeta: true
 })
 const cover = computed(() => props.cover || 'https://placehold.co/96x144?text=Libro')
-const { title, author, year, showMeta, largeCover } = toRefs(props)
+const { title, author, year, showMeta, largeCover, centerOnMobile } = toRefs(props)
 </script>
 
 <style scoped>
@@ -24,6 +24,9 @@ const { title, author, year, showMeta, largeCover } = toRefs(props)
 .cover-large { width: 160px; height: 240px; object-fit: cover; }
 @media (min-width: 1024px) {
   .cover-large { width: 180px; height: 270px; }
+}
+@media (max-width: 640px) {
+  .stack-mobile { flex-direction: column; align-items: center !important; }
 }
 </style>
 
