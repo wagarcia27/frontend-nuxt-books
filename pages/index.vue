@@ -45,6 +45,8 @@
 
 <script setup lang="ts">
 const store = useSearchStore()
+// Limpiar resultados residuales inmediatamente al entrar a Home
+store.results = []
 const hasSearched = ref(false)
 const doSearch = (q: string) => { hasSearched.value = true; store.searchByTitle(q) }
 const limited = computed(() => store.results.slice(0, 10))
