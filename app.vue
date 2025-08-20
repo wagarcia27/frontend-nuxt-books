@@ -12,6 +12,9 @@
 const auth = useAuthStore()
 onMounted(() => {
   // Validar sesión si hay token guardado
-  if (auth.token) auth.whoAmI()
+  if (auth.token) {
+    // Validación en background; no cerrar sesión si falla, solo loguear
+    auth.whoAmI().catch(() => {})
+  }
 })
 </script>

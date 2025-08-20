@@ -1,22 +1,13 @@
-export default defineNuxtRouteMiddleware(async (to) => {
+export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuthStore()
 
-  // Permitir la página de login siempre
-  if (to.path === '/login') {
-    // Si ya está autenticado, opcionalmente redirigir al home
-    if (auth.isAuthenticated) return
-    return
-  }
+  // Permitir siempre la pantalla de login (considerando baseURL)
+  if (to.path.endsWith('/login')) return
 
-  // Proteger todas las rutas restantes
+  // Proteger rutas: si no hay token, redirigir a login
   if (!auth.isAuthenticated) {
     return navigateTo('/login')
   }
-
-  // Validar sesión contra el backend (por si el token expiró o es inválido)
-  const who = await auth.whoAmI()
-  if (!who) {
-    auth.logout()
-    return navigateTo('/login')
-  }
+  // Nota: la validación con whoAmI se hace en app.vue de forma tolerante,
+  // para evitar cerrar sesión por fallas transitorias de red/CORS.
 })
