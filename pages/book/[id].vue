@@ -108,8 +108,21 @@ const save = async () => {
 
 <style scoped>
 .review-card { display: grid; gap: 12px; }
-.review-card :deep(img.cover) { height: 100%; width: 180px; object-fit: cover; }
+/* Portada grande, sin recortes y con marco para que se vea nítida */
+.review-card :deep(img.cover) {
+  width: 240px; /* mayor presencia */
+  height: auto;
+  object-fit: contain; /* no recorta */
+  background: #0b1220;
+  padding: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+}
 .textarea-wrap { position: relative; }
 .textarea-wrap .char-counter { position: absolute; right: 10px; bottom: 8px; font-size: 12px; color: var(--muted); }
+@media (min-width: 1200px) {
+  .review-card :deep(img.cover) { width: 280px; }
+}
 </style>
 
