@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="isAuthed" v-cloak>
     <div class="card">
       <SearchBar
         :placeholder="'Escribe el nombre de un libro para continuar'"
@@ -48,9 +48,14 @@ const store = useSearchStore()
 const hasSearched = ref(false)
 const doSearch = (q: string) => { hasSearched.value = true; store.searchByTitle(q) }
 const limited = computed(() => store.results.slice(0, 10))
+const isAuthed = ref(false)
 onMounted(async () => {
+  isAuthed.value = Boolean(localStorage.getItem('br_token'))
+  if (!isAuthed.value) {
+    navigateTo('/login', { replace: true })
+    return
+  }
   await store.loadLastQueries()
-  // Cargar “home” del usuario autenticado (hasta 10 items)
   await store.loadHome()
 })
 </script>
