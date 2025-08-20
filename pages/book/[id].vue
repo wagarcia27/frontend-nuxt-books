@@ -124,5 +124,18 @@ const save = async () => {
 @media (min-width: 1200px) {
   .review-card :deep(img.cover) { width: 280px; }
 }
+/* Mobile optimizaciones */
+@media (max-width: 640px) {
+  /* Colocar portada arriba y contenido debajo, centrados */
+  :deep(.card) {
+    flex-direction: column;
+    align-items: center;
+  }
+  .review-card :deep(img.cover) {
+    width: 70vw;
+    max-width: 260px;
+  }
+  .review-card { gap: 16px; }
+}
 </style>
 
