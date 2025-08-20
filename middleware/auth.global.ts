@@ -1,13 +1,13 @@
 export default defineNuxtRouteMiddleware((to) => {
-  const auth = useAuthStore()
-
-  // Permitir siempre la pantalla de login (considerando baseURL)
+  // Permitir siempre la pantalla de login (respetando baseURL)
   if (to.path.endsWith('/login')) return
 
-  // Proteger rutas: si no hay token, redirigir a login
-  if (!auth.isAuthenticated) {
+  // En SSR/generación, no decidir autenticación aún
+  if (import.meta.server) return
+
+  // Verificar token directamente desde localStorage para evitar condiciones de hidratación
+  const token = localStorage.getItem('br_token')
+  if (!token) {
     return navigateTo('/login')
   }
-  // Nota: la validación con whoAmI se hace en app.vue de forma tolerante,
-  // para evitar cerrar sesión por fallas transitorias de red/CORS.
 })
