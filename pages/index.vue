@@ -48,6 +48,10 @@ const store = useSearchStore()
 const hasSearched = ref(false)
 const doSearch = (q: string) => { hasSearched.value = true; store.searchByTitle(q) }
 const limited = computed(() => store.results.slice(0, 10))
-onMounted(() => store.loadLastQueries())
+onMounted(async () => {
+  await store.loadLastQueries()
+  // Cargar “home” del usuario autenticado (hasta 10 items)
+  await store.loadHome()
+})
 </script>
 

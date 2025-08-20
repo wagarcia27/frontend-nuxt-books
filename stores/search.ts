@@ -25,6 +25,36 @@ export const useSearchStore = defineStore('search', {
     error: null
   }),
   actions: {
+    async loadHome() {
+      this.isLoading = true
+      this.error = null
+      try {
+        const api = useApi()
+        const res: any = await api.get('/books/home')
+        const raw: any[] = Array.isArray(res) ? res : (res?.results || res?.items || [])
+        const normalizeCoverUrl = (u?: string): string | undefined => {
+          if (!u) return undefined
+          if (u.startsWith('http')) return u
+          if (u.startsWith('/api/')) return `${api.baseURL}${u.slice(4)}`
+          if (u.startsWith('/books/')) return `${api.baseURL}${u}`
+          if (u.startsWith('/')) return `${api.baseURL}${u}`
+          return u
+        }
+        this.results = raw.map((r: any) => ({
+          id: String(r.id || r.workId || r.openLibraryWorkKey || '').replace('/works/', ''),
+          title: r.title,
+          author: r.author,
+          year: r.year || r.publishYear,
+          coverUrl: normalizeCoverUrl(r.coverUrl),
+          saved: Boolean(r.saved),
+          savedId: r.savedId || r.savedID || r.libraryId || undefined
+        }))
+      } catch (e: any) {
+        this.error = e?.message || 'Error cargando inicio'
+      } finally {
+        this.isLoading = false
+      }
+    },
     async searchByTitle(query: string) {
       if (!query) return
       this.isLoading = true
